@@ -1,0 +1,188 @@
+package games;
+
+import java.util.Scanner;
+import java.util.Random;
+
+public class games {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+        while (true) {
+            System.out.println("Choose a game to play:");
+            System.out.println("1. Tic Tac Toe");
+            System.out.println("2. Rock-Paper-Scissors");
+            System.out.println("3. Number Guessing Game");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
+            switch (choice) {
+                case 1:
+                    playTicTacToe(scanner);
+                    break;
+                case 2:
+                    playRockPaperScissors(scanner, random);
+                    break;
+                case 3:
+                    playNumberGuessingGame(scanner, random);
+                    break;
+                case 4:
+                    System.out.println("Exiting the program. Goodbye!");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please choose a valid option.");
+            }
+        }
+    }
+
+    // Tic Tac Toe Game Logic
+    public static void playTicTacToe(Scanner scanner) {
+        char[][] board = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
+        char currentPlayer = 'x';
+
+        while (true) {
+            printBoard(board);
+            System.out.println("Enter the indexes of row and column between spacing:");
+            int row = scanner.nextInt();
+            int col = scanner.nextInt();
+
+            if (isValidMove(board, row, col)) {
+                board[row][col] = currentPlayer;
+                if (checkWin(board, currentPlayer)) {
+                    printBoard(board);
+                    System.out.println("Player " + currentPlayer + " wins!");
+                    break;
+                }
+                if (isBoardFull(board)) {
+                    printBoard(board);
+                    System.out.println("It's a tie game!");
+                    break;
+                }
+                currentPlayer = (currentPlayer == 'x') ? 'o' : 'x';
+            } else {
+                System.out.println("Invalid move");
+            }
+        }
+    }
+
+    // Rock-Paper-Scissors Game Logic
+    public static void playRockPaperScissors(Scanner scanner, Random random) {
+        int playerPoints = 0;
+        int computerPoints = 0;
+        int totalRounds = 5;
+
+        for (int i = 0; i < totalRounds; i++) {
+            System.out.println("Round " + (i + 1) + " - Enter your choice (r for Rock, p for Paper, s for Scissors):");
+            String userChoice = scanner.nextLine();
+            int computerChoice = random.nextInt(3) + 1;
+            String computerChoiceString;
+
+            if (computerChoice == 1) {
+                computerChoiceString = "r";
+            } else if (computerChoice == 2) {
+                computerChoiceString = "p";
+            } else {
+                computerChoiceString = "s";
+            }
+
+            System.out.println("Computer's choice: " + computerChoiceString);
+
+            if (computerChoiceString.equals(userChoice)) {
+                System.out.println("It's a tie");
+            } else if ((computerChoiceString.equals("s") && userChoice.equals("r")) ||
+                    (computerChoiceString.equals("p") && userChoice.equals("s")) ||
+                    (computerChoiceString.equals("r") && userChoice.equals("p"))) {
+                System.out.println("You won this round!");
+                playerPoints++;
+            } else {
+                System.out.println("Computer won this round!");
+                computerPoints++;
+            }
+            System.out.println("Current Score - You: " + playerPoints + ", Computer: " + computerPoints);
+        }
+
+        if (playerPoints > computerPoints) {
+            System.out.println("Congratulations! You won the game!");
+        } else if (playerPoints < computerPoints) {
+            System.out.println("Better luck next time! Computer won the game!");
+        } else {
+            System.out.println("It's a draw! Good game!");
+        }
+    }
+
+    // Number Guessing Game Logic
+    public static void playNumberGuessingGame(Scanner scanner, Random random) {
+        int lowerBound = 1;
+        int upperBound = 100;
+        int numberToGuess = random.nextInt(upperBound - lowerBound + 1) + lowerBound;
+        int attempts = 0;
+
+        System.out.println("Welcome to the Number Guessing Game!");
+        System.out.println("I've selected a number between " + lowerBound + " and " + upperBound + ". Try to guess it.");
+boolean guess=false;
+        for(int i=0;i<=3;i++){
+            System.out.print("Enter your guess: ");
+            int userGuess = scanner.nextInt();
+            attempts++;
+
+            if (userGuess < numberToGuess) {
+                System.out.println("its lower than my imagination! Try again.");
+                guess=false;
+            } else if (userGuess > numberToGuess) {
+                System.out.println("its higher than my imagination high! Try again.");
+                guess=false;
+            } else {
+                System.out.println("Congratulations! You guessed the number in " + (i+1) + " attempts.");
+                guess=true;
+                break;
+            }
+        }
+        if (!guess) {
+        	System.out.println("oops! try again");
+        }
+        
+     
+    }
+
+    // Helper Methods
+    public static void printBoard(char[][] board) {
+        for (int i = 0; i < 3; i++) {
+            System.out.println(board[i][0] + " | " + board[i][1] + " | " + board[i][2]);
+            if (i < 2) {
+                System.out.println("---------");
+            }
+        }
+    }
+
+    public static boolean isValidMove(char[][] board, int row, int col) {
+        return row >= 0 && row < 3 && col >= 0 && col < 3 && board[row][col] == ' ';
+    }
+
+    public static boolean checkWin(char[][] board, char currentPlayer) {
+        for (int i = 0; i < 3; i++) {
+            if (board[i][0] == currentPlayer && board[i][1] == currentPlayer && board[i][2] == currentPlayer) {
+                return true;
+            }
+            if (board[0][i] == currentPlayer && board[1][i] == currentPlayer && board[2][i] == currentPlayer) {
+                return true;
+            }
+        }
+        return (board[0][0] == currentPlayer && board[1][1] == currentPlayer && board[2][2] == currentPlayer) ||
+                (board[0][2] == currentPlayer && board[1][1] == currentPlayer && board[2][0] == currentPlayer);
+    }
+
+    public static boolean isBoardFull(char[][] board) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j] == ' ') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
