@@ -1,0 +1,107 @@
+package bmsswing;
+		import javax.swing.*;
+		import java.awt.*;
+		import java.awt.event.ActionEvent;
+		import java.awt.event.ActionListener;
+		import java.util.HashMap;
+		import java.util.Map;
+
+		public class bmsswing extends JFrame {
+
+		    private Map<String, Double> accounts;
+
+		    public bmsswing() {
+		        accounts = new HashMap<>();
+		        initializeUI();
+		    }
+
+		    private void initializeUI() {
+		        setTitle("Bank Management System");
+		        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		        setSize(570, 400);
+
+		        JPanel panel = new JPanel();
+		        panel.setLayout(new GridLayout(4, 2));
+
+		        JLabel nameLabel = new JLabel("Account Holder Name:");
+		        JTextField nameField = new JTextField();
+
+		        JLabel balanceLabel = new JLabel("Initial Balance:");
+		        JTextField balanceField = new JTextField();
+
+		        JButton createAccountButton = new JButton("Create Account");
+		        JButton depositButton = new JButton("Deposit");
+		        JButton withdrawButton = new JButton("Withdraw");
+
+		        JLabel resultLabel = new JLabel();
+
+		        panel.add(nameLabel);
+		        panel.add(nameField);
+		        panel.add(balanceLabel);
+		        panel.add(balanceField);
+		        panel.add(createAccountButton);
+		        panel.add(new JLabel()); // Empty cell for spacing
+		        panel.add(depositButton);
+		        panel.add(withdrawButton);
+
+		        createAccountButton.addActionListener(new ActionListener() {
+		            @Override
+		            public void actionPerformed(ActionEvent e) {
+		                String name = nameField.getText();
+		                double initialBalance = Double.parseDouble(balanceField.getText());
+		                accounts.put(name, initialBalance);
+		                resultLabel.setText("Account created for " + name+" successfully");
+		            }
+		        });
+
+		        depositButton.addActionListener(new ActionListener() {
+		            @Override
+		            public void actionPerformed(ActionEvent e) {
+		                String name = nameField.getText();
+		                double amount = Double.parseDouble(balanceField.getText());
+		                if (accounts.containsKey(name)) {
+		                    double currentBalance = accounts.get(name);
+		                    currentBalance += amount;
+		                    accounts.put(name, currentBalance);
+		                    resultLabel.setText("Deposit successful. New balance: " + currentBalance);
+		                } else {
+		                    resultLabel.setText("Account not found");
+		                }
+		            }
+		        });
+
+		        withdrawButton.addActionListener(new ActionListener() {
+		            @Override
+		            public void actionPerformed(ActionEvent e) {
+		                String name = nameField.getText();
+		                double amount = Double.parseDouble(balanceField.getText());
+		                if (accounts.containsKey(name)) {
+		                    double currentBalance = accounts.get(name);
+		                    if (currentBalance >= amount) {
+		                        currentBalance -= amount;
+		                        accounts.put(name, currentBalance);
+		                        resultLabel.setText("Withdrawal successful. New balance: " + currentBalance);
+		                    } else {
+		                        resultLabel.setText("Insufficient funds");
+		                    }
+		                } else {
+		                    resultLabel.setText("Account not found");
+		                }
+		            }
+		        });
+
+		        add(panel, BorderLayout.CENTER);
+		        add(resultLabel, BorderLayout.SOUTH);
+
+		        setVisible(true);
+		    }
+
+		    public static void main(String[] args) {
+		        SwingUtilities.invokeLater(new Runnable() {
+		            @Override
+		            public void run() {
+		                new bmsswing();
+		            }
+		        });
+		    }
+}
