@@ -1,0 +1,49 @@
+package details;
+import java.util.*;
+public class details {
+	public static void main(String[] args) {
+		HashMap<String,HashMap<String,String>> sdts=new HashMap<>();
+		Scanner sc=new Scanner(System.in);
+		for(int i=0;i<2;i++) {
+			
+			System.out.println("Enter details for student "+(i+1));
+			System.out.println("Name:");
+			String name=sc.nextLine();
+			System.out.println("phno:");
+			String phno=sc.nextLine();
+			System.out.println("email");
+			String email=sc.nextLine();
+			System.out.println("rno:");
+			String rno=sc.nextLine();
+			
+			HashMap<String,String> info=new HashMap<>();
+			info.put("name",name);
+			info.put("email", email);
+			info.put("phno", phno);
+			sdts.put(rno, info);
+		}
+		TreeMap <String,HashMap<String,String>> sorted=new TreeMap<>(sdts);
+		System.out.println("1. to print all students details:\n2.acesss single student");
+		int ch=sc.nextInt();
+		if(ch==1) {
+			for(String key:sorted.keySet()) {
+				System.out.println(sorted.get(key));
+			}
+		}
+		
+		else if(ch==2){
+			System.out.println("enter the roll no to access information: ");
+			sc.nextLine();
+			String rn=sc.nextLine();
+			if(sorted.containsKey(rn)) {
+			System.out.println("details for the rollnumber "+ rn);
+			HashMap<String,String> comdet=sorted.get(rn);
+			System.out.println("name: "+comdet.get("name")+"\nphone number:"+comdet.get("phno")+"\nemail id:"+comdet.get("email"));
+			}
+		}
+		else {
+			System.out.println("enter a valid choice: ");
+		}
+	}
+
+	}
