@@ -1,0 +1,124 @@
+package newtimetable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class changed {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // User input for time slots
+        ArrayList<String> timeSlots = getTimeSlots(sc);
+
+        // User input for breaks
+        ArrayList<String> breakTimings = getBreakTimings(sc);
+
+        // User input for academic year and subjects
+        int year = getAcademicYear(sc);
+        ArrayList<String> subjects = getSubjects(sc, year);
+        System.out.println("for how many sections do you want to generate timetable: ");
+    	int secs=sc.nextInt();
+        // Generate timetable
+        generateTimetable(timeSlots, breakTimings, subjects,secs);
+    }
+
+    private static ArrayList<String> getTimeSlots(Scanner sc) {
+        ArrayList<String> timeSlots = new ArrayList<>();
+        System.out.println("How many periods do you have?");
+        int periods = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Enter the start time for the first period (e.g., 9:00):");
+        String startTime = sc.nextLine();
+System.out.println("enter the time duration for every period: ");
+int tdu=sc.nextInt();
+        // Assuming each period is 45 minutes
+        for (int i = 0; i < periods; i++) {
+            String endTime = addMinutesToTime(startTime, tdu);
+            timeSlots.add(startTime + "-" + endTime);
+            startTime = endTime; // Move to the next period
+        }
+
+        return timeSlots;
+    }
+
+    private static String addMinutesToTime(String startTime, int minutesToAdd) {
+        String[] parts = startTime.split(":");
+        int hours = Integer.parseInt(parts[0]);
+        int minutes = Integer.parseInt(parts[1]);
+
+        minutes += minutesToAdd;
+        hours += minutes / 60;
+        minutes %= 60;
+
+        return String.format("%02d:%02d", hours, minutes);
+    }
+
+    private static ArrayList<String> getBreakTimings(Scanner sc) {
+        ArrayList<String> breakTimings = new ArrayList<>();
+        System.out.println("How many breaks do you want to give?");
+        int breakCount = sc.nextInt();
+        sc.nextLine();
+
+        for (int i = 0; i < breakCount; i++) {
+            System.out.println("Enter break " + (i + 1) + " timing (e.g., 10:30-10:45):");
+            String breakTiming = sc.nextLine();
+            breakTimings.add(breakTiming);
+        }
+
+        Collections.sort(breakTimings);
+        return breakTimings;
+    }
+
+    private static int getAcademicYear(Scanner sc) {
+        System.out.println("For which  year do you want to prepare the timetable?");
+        return sc.nextInt();
+    }
+
+    private static ArrayList<String> getSubjects(Scanner sc, int year) {
+        ArrayList<String> subjects = new ArrayList<>();
+        System.out.println("How many subjects are there for year " + year + "?");
+        int subs = sc.nextInt();
+        sc.nextLine();
+
+        for (int i = 0; i < subs; i++) {
+            System.out.println("Enter faculty " + (i + 1) + " name:");
+            String fac = sc.nextLine();
+            System.out.println("Enter the subject of " + fac + ":");
+            String sub = sc.nextLine();
+            subjects.add(fac + ": " + sub);
+        }
+
+        Collections.shuffle(subjects);
+        return subjects;
+    }
+
+    private static void generateTimetable(ArrayList<String> timeSlots, ArrayList<String> breakTimings, ArrayList<String> subjects, int secs) {
+        for (int k = 0; k < secs; k++) {
+            Collections.shuffle(subjects); // Shuffle subjects separately for each section
+            int subjectIndex = 0;
+            HashMap<String, String> schedule = new HashMap<>(); // Track scheduled subjects for each time slot
+
+            for (String time : timeSlots) {
+                if (breakTimings.contains(time)) {
+                    System.out.println(time + " Break");
+                } else {
+                    String subject = subjects.get(subjectIndex % subjects.size());
+
+                    // Check for repetition in the same time slot
+                    while (schedule.containsValue(subject)) {
+                        subject = subjects.get(++subjectIndex % subjects.size());
+                    }
+
+                    schedule.put(time, subject);
+                    System.out.println(time + " " + subject);
+                    subjectIndex++;
+                }
+            }
+            System.out.println('\t');
+        }
+    }
+}
