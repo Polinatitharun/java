@@ -1,0 +1,456 @@
+import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Random;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+class Application {
+
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("Choose an option:");
+            System.out.println("1. Contacts");
+            System.out.println("2. Tic Tac Toe");
+            System.out.println("3. Rock Paper Scissors");
+            System.out.println("4. Online Shopping Mall");
+            System.out.println("5. Exit");
+
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    runContacts();
+                    break;
+                case 2:
+                    runTicTacToe();
+                    break;
+                case 3:
+                    runRockPaperScissors();
+                    break;
+               case 4:
+                    OnlineShoppingMall onlineShoppingMall = new OnlineShoppingMall();
+                    onlineShoppingMall.runOnlineShoppingMall();
+                    break;
+                case 5:
+                    System.out.println("Exiting the application. Goodbye!");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please choose a valid option.");
+                    break;
+            }
+        }
+    }
+
+    // Contacts Application
+    private static class Contact {
+        private HashMap<String, Long> user = new HashMap<>();
+
+        public void addContact(long phno, String name) {
+            if (String.valueOf(phno).length() != 10) {
+                System.out.println("Invalid phone number. Please enter exactly 10 digits.");
+                return;
+            }
+            user.put(name, phno);
+            System.out.println(name + " added to contacts successfully............................");
+            System.out.println(" ");
+        }
+        public Long getContact(String name) {
+            return user.get(name);
+        }
+    }
+
+    private static void runContacts() {
+        Scanner s = new Scanner(System.in);
+        Contact c = new Contact();
+        System.out.println("Welcome to contacts");
+        int n = 1;
+        do {
+            System.out.println("1. Add new contact");
+            System.out.println("_______________________________________");
+            System.out.println("2. Search for a contact");
+            System.out.println("_______________________________________");
+            System.out.println("Enter your choice: ");
+            int uch = s.nextInt();
+            switch (uch) {
+                case 1:
+                    System.out.println("Enter the phone number");
+                    long phno = s.nextLong();
+                    System.out.println("Enter the name");
+                    s.nextLine();
+                    String name = s.nextLine();
+                    c.addContact(phno, name);
+                    break;
+                case 2:
+                    System.out.println("Enter the name to search");
+                    s.nextLine();
+                    String searchName = s.nextLine();
+                    Long phoneNumber = c.getContact(searchName);
+                    if (phoneNumber != null) {
+                        System.out.println("*************************************************************");
+                        System.out.println("Phone number for " + searchName + " is " + phoneNumber);
+                        System.out.println("*************************************************************");
+                        System.out.println(" ");
+                    } else {
+                        System.out.println("Contact not found!....");
+                    }
+                    break;
+                default:
+                    System.out.println("Invalid choice");
+                    break;
+            }
+        } while (n >= 0);
+    }
+
+    // Tic Tac Toe Game
+    private static class TicTacToe {
+        private static final int BOARD_SIZE = 3;
+        private char[][] board = new char[BOARD_SIZE][BOARD_SIZE];
+        private char currentPlayer = 'X';
+
+        public TicTacToe() {
+            // Initialize the board with empty spaces
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                for (int j = 0; j < BOARD_SIZE; j++) {
+                    board[i][j] = ' ';
+                }
+            }
+        }
+
+        public void playGame() {
+            Scanner scanner = new Scanner(System.in);
+
+            while (true) {
+                printBoard();
+
+                System.out.print("Player " + currentPlayer + ", enter row (0-2) and column (0-2) separated by a space: ");
+                int row = scanner.nextInt();
+                int col = scanner.nextInt();
+
+                if (isValidMove(row, col)) {
+                    board[row][col] = currentPlayer;
+                    if (checkWin()) {
+                        printBoard();
+                        System.out.println("Player " + currentPlayer + " wins!");
+                        break;
+                    }
+                    if (isBoardFull()) {
+                        printBoard();
+                        System.out.println("It's a tie!");
+                        break;
+                    }
+                    currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+                } else {
+                    System.out.println("Invalid move. Try again.");
+                }
+            }
+        }
+
+        private void printBoard() {
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                System.out.println(board[i][0] + " | " + board[i][1] + " | " + board[i][2]);
+                if (i < BOARD_SIZE - 1) {
+                    System.out.println("---------");
+                }
+            }
+        }
+
+        private boolean isValidMove(int row, int col) {
+            return row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE && board[row][col] == ' ';
+        }
+
+        private boolean checkWin() {
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                if (board[i][0] == currentPlayer && board[i][1] == currentPlayer && board[i][2] == currentPlayer) {
+                    return true; // Row win
+                }
+                if (board[0][i] == currentPlayer && board[1][i] == currentPlayer && board[2][i] == currentPlayer) {
+                    return true; // Column win
+                }
+            }
+            if (board[0][0] == currentPlayer && board[1][1] == currentPlayer && board[2][2] == currentPlayer) {
+                return true; // Diagonal win (top-left to bottom-right)
+            }
+            return board[0][2] == currentPlayer && board[1][1] == currentPlayer && board[2][0] == currentPlayer;
+        }
+
+        private boolean isBoardFull() {
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                for (int j = 0; j < BOARD_SIZE; j++) {
+                    if (board[i][j] == ' ') {
+                        return false; // There's an empty space
+                    }
+                }
+            }
+            return true; // The board is full
+        }
+    }
+
+    private static void runTicTacToe() {
+        TicTacToe ticTacToe = new TicTacToe();
+        ticTacToe.playGame();
+    }
+
+    // Rock Paper Scissors Game
+    private static void runRockPaperScissors() {
+        int playerPoints = 0;
+        int computerPoints = 0;
+        int totalRounds = 5; // Total rounds to play
+        Random r = new Random();
+        Scanner sc = new Scanner(System.in);
+
+        for (int i = 0; i < totalRounds; i++) {
+            System.out.println("Round " + (i + 1) + " - Enter your choice (r for Rock, p for Paper, s for Scissors):");
+            String hch = sc.nextLine();
+            int cch = r.nextInt(3) + 1;
+            String cch2;
+            if (cch == 1) {
+                cch2 = "r";
+            } else if (cch == 2) {
+                cch2 = "p";
+            } else {
+                cch2 = "s";
+            }
+            System.out.println("Computer's choice: " + cch2);
+
+            if (cch2.equals(hch)) {
+                System.out.println("It's a tie");
+            } else if ((cch2.equals("s") && hch.equals("r")) || (cch2.equals("p") && hch.equals("s")) || (cch2.equals("r") && hch.equals("p"))) {
+                System.out.println("You won this round!");
+                playerPoints++;
+            } else {
+                System.out.println("I won this round!");
+                computerPoints++;
+            }
+            System.out.println("Current Score - You: " + playerPoints + ", Computer: " + computerPoints);
+        }
+
+        if (playerPoints > computerPoints) {
+            System.out.println("Congratulations! You won the game!");
+        } else if (playerPoints < computerPoints) {
+            System.out.println("Better luck next time! I won the game!");
+        } else {
+            System.out.println("It's a draw! Good game!");
+        }
+    }
+
+    // Online Shopping Mall
+    private static class OnlineShoppingMall {
+        private static String productName;
+        private static int productPrice;
+        private static int discount;
+
+        public static boolean passwordValidator(String password) {
+            int c = 0, d = 0, sp = 0;
+            if (password.length() >= 8 && password.length() <= 13) {
+                for (int i = 0; i < password.length(); i++) {
+                    char ch = password.charAt(i);
+                    if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) {
+                        c++;
+                    } else if (ch == '@' || ch == '#' || ch == '%' || ch == '*') {
+                        sp++;
+                    } else {
+                        d++;
+                    }
+                }
+            } else {
+                return false;
+            }
+            int t = c + sp + d;
+            return (c >= 1) && (sp >= 1) && (d >= 1) && (t == password.length());
+        }
+
+        public static boolean emailValidator(String email) {
+            try {
+                String[] x = email.split("@");
+                return x[1].equals("gmail.com");
+            } catch (ArrayIndexOutOfBoundsException e) {
+                return false;
+            }
+        }
+
+        private static String generateOtp(int length) {
+            String numbers = "1234567890";
+            Random random = new Random();
+            StringBuilder otp = new StringBuilder();
+
+            for (int i = 0; i < length; i++) {
+                otp.append(numbers.charAt(random.nextInt(numbers.length())));
+            }
+            return otp.toString();
+        }
+
+        private static String generatePassword(int length) {
+            String capitalCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+            String specialCharacters = "!@#$";
+            String numbers = "1234567890";
+            String combinedChars = capitalCaseLetters + lowerCaseLetters + specialCharacters + numbers;
+            Random random = new Random();
+            StringBuilder password = new StringBuilder();
+
+            password.append(lowerCaseLetters.charAt(random.nextInt(lowerCaseLetters.length())));
+            password.append(capitalCaseLetters.charAt(random.nextInt(capitalCaseLetters.length())));
+            password.append(specialCharacters.charAt(random.nextInt(specialCharacters.length())));
+            password.append(numbers.charAt(random.nextInt(numbers.length())));
+
+            for (int i = 4; i < length; i++) {
+                password.append(combinedChars.charAt(random.nextInt(combinedChars.length())));
+            }
+            return password.toString();
+        }
+
+        public static void runOnlineShoppingMall() {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Enter your mobile number (10 digits):");
+            String phoneNumber;
+            do {
+                phoneNumber = sc.nextLine();
+                if (phoneNumber.length() != 10) {
+                    System.out.println("Invalid phone number. Please enter exactly 10 digits.");
+                }
+            } while (phoneNumber.length() != 10);
+    
+
+            System.out.println("Enter a password (must contain at least 8-13 characters):");
+            String password = sc.nextLine();
+            boolean isPasswordValid = passwordValidator(password);
+
+            System.out.println("Enter your email to sign up:");
+            String email = sc.nextLine();
+            boolean isEmailValid = emailValidator(email);
+
+            if (isPasswordValid && isEmailValid) {
+                System.out.println("Logging in!");
+                String otpId = generateOtp(5);
+                System.out.println("OTP was sent to your number " + phoneNumber);
+                System.out.println("Your OTP for login to the online business platform is: " + otpId + ".\n It is valid for 5 minutes only.");
+                System.out.println("Enter OTP:");
+                String userOtp = sc.nextLine();
+
+                if (userOtp.equals(otpId)) {
+                    System.out.println("Logged in successfully");
+                    System.out.println("********************Welcome to Tharun Mall*************************");
+                    System.out.println("Dear customer, please enter your name:");
+                    String customerName = sc.nextLine();
+                    System.out.println("Dear " + customerName + ", hope you are enjoying your day");
+                    System.out.println("Choose the products you want:");
+                    System.out.println("Available products:");
+                    System.out.println("1. Laptop - 25000");
+                    System.out.println("2. Bag - 550");
+                    System.out.println("3. LED TV - 20000");
+                    System.out.println("Enter the product number:");
+
+                    int productId = sc.nextInt();
+
+                    switch (productId) {
+                        case 1:
+                            productName = "Laptop";
+                            productPrice = 25000;
+                            break;
+                        case 2:
+                            productName = "Bag";
+                            productPrice = 550;
+                            break;
+                        case 3:
+                            productName = "LED TV";
+                            productPrice = 20000;
+                            break;
+                        default:
+                            System.out.println("Invalid product number");
+                            return;
+                    }
+
+                    System.out.println("***Product: " + productName + "***");
+                    System.out.println("Total price: " + productPrice);
+
+                    System.out.println("Is a coupon available? Enter 1 for yes, 2 for no");
+                    int choice = sc.nextInt();
+
+                    if (choice == 1) {
+                        System.out.println("Enter coupon code:");
+                        sc.nextLine(); // Consume the newline character left in the buffer
+                        String code = sc.nextLine();
+
+                        if (code.equals("Dusshera")) {
+                            System.out.println("Thank you!");
+                            discount = 500;
+                            int bill = productPrice - discount;
+                            System.out.println("Discount with coupon code: " + discount);
+                            System.out.println("Final price: " + bill);
+                        } else {
+                            System.out.println("Invalid coupon code");
+                        }
+                    } else if (choice == 2) {
+                        System.out.println("Thank you!");
+                        discount = 0;
+                        int bill = productPrice - discount;
+                        System.out.println("Discount: " + discount);
+                        System.out.println("Final price: " + bill);
+                    } else {
+                        System.out.println("Invalid choice for coupon availability");
+                    }
+
+                    System.out.println("Enter \n1. To buy now \n2. To add to wishlist");
+                    int fch = sc.nextInt();
+                    if (fch == 1) {
+                        System.out.println("Choose delivery mode \n1. Cash on delivery\n2. Net banking");
+                        int dch = sc.nextInt();
+                        sc.nextLine(); // Consume the newline character left in
+                        // buffer
+                        if (dch == 1) {
+                            System.out.println("Enter the address:");
+                            String address = sc.nextLine();
+                            System.out.println("Thank you for shopping ");
+                            System.out.println("**************Bill**************");
+                            System.out.println("Product: " + productName);
+                            System.out.println("Price : " + productPrice);
+                            System.out.println("Discount allowed: " + discount);
+
+                            // Get the current date
+                            LocalDate currentDate = LocalDate.now();
+                            System.out.println("Date: " + currentDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+                            // Adding 5 days to the current date
+                            LocalDate deliveryDate = currentDate.plusDays(5);
+                            System.out.println("Estimated Delivery Date: " + deliveryDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+                            System.out.println("You will receive your order within 5 days");
+                        } else {
+                            System.out.println("Enter your bank card number:");
+                            String bankAcNo = sc.nextLine();
+                            System.out.println("Thank you for shopping ");
+                            System.out.println("**************Bill**************");
+                            System.out.println("Product: " + productName);
+                            System.out.println("Price : " + productPrice);
+                            System.out.println("Discount allowed: " + discount);
+                            System.out.println("You will receive your order within 5 days");
+                        }
+                   } else {
+                        System.out.println("Invalid choice for coupon availability");
+                    }
+                } else {
+                    System.out.println("Invalid OTP, failed to log in");
+                }
+            } else {
+                System.out.println("Invalid choice for coupon availability");
+            }
+        if (!isPasswordValid || !isEmailValid) {
+            System.out.println("EMAIL OR PASSWORD INCORRECT");
+            System.out.println("Enter 1 to suggest a strong password, or 2 to see a demo email format");
+            int choice = sc.nextInt();
+            if (choice == 1) {
+                System.out.println("Your new password generated, use this for future reference:");
+                System.out.println(generatePassword(8));
+            } else {
+                System.out.println("Hey, your email must be in the format xxxxxx@gmail.com");
+            }
+            return;
+        }
+    }
+
+}
+}
