@@ -1,0 +1,100 @@
+package menudriven;
+import java.util.Scanner;
+public class menudriven {
+
+	public static void main(String[] args) {
+		
+Scanner sc=new Scanner(System.in);
+while(true) {
+System.out.println("1.weight converter\n2.distance converter\n3.currenncy converter\n4.temparature converter\n5.exit\n enter your choice");
+int ch=sc.nextInt();
+switch(ch) {
+case 1:
+	System.out.println("1.gramms to kilo gramms\n2.kilo gramms to gramms\n enter your option");
+	int gkm=sc.nextInt();
+	if(gkm==1) {
+		System.out.println("enter the weight in GRAMMS");
+		int gms=sc.nextInt();
+		float kgs=gms/1000;
+		System.out.println("kilogramms for "+ gms +"gramms= "+kgs);
+	}
+	else if(gkm==2) {
+		System.out.println("ENTER THE WEIGHT ING KILOGRAMMS");
+		int kg=sc.nextInt();
+		float gm=kg*1000;
+		System.out.println("gramms for "+kg+" kilogramms= "+gm);
+	}
+	else {
+		System.out.println("enter the valid choice");
+	}
+	break;
+case 2:
+	System.out.println("1.meters to kilo meters\n2.kilo meters to meters\nenter your option");
+	int mkm=sc.nextInt();
+	if(mkm==1) {
+		System.out.println("enter the distance in meters:");
+		int mtrs=sc.nextInt();
+		int kmtrs=mtrs/1000;
+		System.out.println("KILO METERS for "+mtrs+" meters is ="+kmtrs);
+	}
+	else if(mkm==2) {
+		System.out.println("enter the distance in kilo meters:");
+		int kmtr=sc.nextInt();
+		int mtr=kmtr*1000;
+		System.out.println("METERS for "+kmtr+" kilo meters is ="+mtr);
+	}
+	else {
+		System.out.println("enter the valid option");
+	}
+	break;
+case 3:
+	System.out.println("1. Usd to India \n 2.India to Usd");
+	int cc=sc.nextInt();
+	if(ch==1) {
+		System.out.println("enter the money in dollars:");
+		int ds=sc.nextInt();
+		float rs=ds*89;
+		System.out.println("Ruppes for "+ds+" dollars+ "+ rs );
+	}
+	else if(ch==2) {
+		System.out.println("enter the money in Rupees:");
+		int rps=sc.nextInt();
+		float drs=rps/89;
+		System.out.println("Dollars for "+rps+" rupees= "+ drs);
+	}
+	else {
+		System.out.println("enter the valid option");
+	}
+	break;
+case 4:
+	System.out.println("1. celsius to fharein heit\n2.fahreinheit to celsius\n enter your option");
+	int cfh=sc.nextInt();
+	if(cfh==1) {
+		System.out.println("enter the temprature in celsius:");
+		float cls=sc.nextFloat();
+		float fht=((cls*32)+5/9);
+		System.out.println("Fahreinheit for the "+cls+" celsius is= "+fht);
+	}
+	else if(cfh==2) {
+		System.out.println("enter the temprature in Fahreinheit:");
+	    float ft=sc.nextFloat();
+	    float cs=((ft-5/9)*32);
+	    System.out.println("celsius for the "+ ft +" fahreinheit is "+cs);
+	}
+	else {
+		System.out.println("enter the valid option");
+	}
+	break;
+case 5:
+	System.out.println("exiting....");
+	System.exit(0);
+	break;
+default:
+	System.out.println("enter the valid option");
+	break;
+}
+}
+
+	}
+
+}
