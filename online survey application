@@ -1,0 +1,66 @@
+import java.util.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+class survey {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Welcome to online feedback application");
+        System.out.println("----------------------------\n");
+        ArrayList<String> subs = new ArrayList<String>();
+        ArrayList<Integer> rates = new ArrayList<Integer>();
+        HashMap<String, Integer> tot = new HashMap<String, Integer>();
+
+        System.out.println("Enter how many students you have:");
+        int stud = sc.nextInt();
+
+        System.out.println("For which year students you want to take feedback? (1, 2, 3)");
+        int year = sc.nextInt();
+
+        switch (year) {
+            case 1:
+                subs.addAll(Arrays.asList("c prog", "ds", "cfot", "telugu", "english", "Ip", "ED"));
+                break;
+            case 2:
+                subs.addAll(Arrays.asList("java", "os", "Afm", "telugu", "english", "online business", "Environmental education"));
+                break;
+            case 3:
+                subs.addAll(Arrays.asList("R lang", "web dev", "cyber security", "IOT", "MLUP", "data mining", "java script"));
+                break;
+            default:
+                System.out.println("Enter a valid year 1, 2, 3");
+                return; // exit the program if an invalid year is entered
+        }
+
+        int c = 0;
+        for (int i = 1; i <= stud; i++) {
+            System.out.println("Student " + i + ":");
+            System.out.println("Enter your rating out of 5 for your faculty member ");
+            for (String s : subs) {
+                System.out.print(s + ": ");
+                int rate = sc.nextInt();
+                if (rate > 5 || rate <= 0) {
+                    rate = 0;
+                }
+                tot.put(s, tot.getOrDefault(s, 0) + rate);
+                rates.add(rate);
+            }
+            c++;
+        }
+
+        // Print feedback results
+        System.out.println("_________________________\nADITYA EDUCATIONAL INSTITUTIONS\n______________________________");
+        System.out.println("\nFeedback Results:");
+        System.out.println("Average feedback for each subject:");
+        for (String subject : subs) {
+            int totalRating = tot.get(subject);
+            double averageRating = (double) totalRating / c;
+            System.out.println(subject + ": " + averageRating);
+        }
+
+        LocalDate d = LocalDate.now();
+        System.out.println("Date : " + d.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+       System.out.println(" ");
+        System.out.println("Total students who entered feedback: " + c);
+    }
+}
