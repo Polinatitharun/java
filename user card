@@ -1,0 +1,156 @@
+package timetable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class UserCard {
+    private String name;
+    private String dateOfBirth;
+    private String address;
+    private String aadharNumber;
+    private String panNumber;
+    private String debitCardNumber;
+    private String creditCardNumber;
+
+    private String password;
+
+    public UserCard(String name, String dateOfBirth, String address, String aadharNumber, String panNumber, String debitCardNumber, String creditCardNumber, String password) {
+        this.name = name;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.aadharNumber = aadharNumber;
+        this.panNumber = panNumber;
+        this.debitCardNumber = debitCardNumber;
+        this.creditCardNumber = creditCardNumber;
+        this.password = password;
+    }
+
+    public void printName(String enteredPassword) {
+        if (enteredPassword.equals(password)) {
+            System.out.println("Name: " + name);
+        } else {
+            System.out.println("Invalid password. Access denied.");
+        }
+    }
+
+    public void printDateOfBirth(String enteredPassword) {
+        if (enteredPassword.equals(password)) {
+            System.out.println("Date of Birth: " + dateOfBirth);
+        } else {
+            System.out.println("Invalid password. Access denied.");
+        }
+    }
+
+    public void printAddress(String enteredPassword) {
+        if (enteredPassword.equals(password)) {
+            System.out.println("Address: " + address);
+        } else {
+            System.out.println("Invalid password. Access denied.");
+        }
+    }
+
+    public void printAadharNumber(String enteredPassword) {
+        if (enteredPassword.equals(password)) {
+            System.out.println("Aadhar Number: " + aadharNumber);
+        } else {
+            System.out.println("Invalid password. Access denied.");
+        }
+    }
+
+    public void printPANNumber(String enteredPassword) {
+        if (enteredPassword.equals(password)) {
+            System.out.println("PAN Number: " + panNumber);
+        } else {
+            System.out.println("Invalid password. Access denied.");
+        }
+    }
+
+    public void printDebitCardNumber(String enteredPassword) {
+        if (enteredPassword.equals(password)) {
+            System.out.println("Debit Card Number: " + debitCardNumber);
+        } else {
+            System.out.println("Invalid password. Access denied.");
+        }
+    }
+
+    public void printCreditCardNumber(String enteredPassword) {
+        if (enteredPassword.equals(password)) {
+            System.out.println("Credit Card Number: " + creditCardNumber);
+        } else {
+            System.out.println("Invalid password. Access denied.");
+        }
+    }
+
+    public static void main(String[] args) {
+        List<UserCard> userCards = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("Select an option:");
+            System.out.println("1. Add New Entry");
+            System.out.println("2. Print User Data");
+            System.out.println("0. Exit");
+
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter Name: ");
+                    String name = scanner.nextLine();
+                    System.out.print("Enter Date of Birth: ");
+                    String dateOfBirth = scanner.nextLine();
+                    System.out.print("Enter Address: ");
+                    String address = scanner.nextLine();
+                    System.out.print("Enter Aadhar Number: ");
+                    String aadharNumber = scanner.nextLine();
+                    System.out.print("Enter PAN Number: ");
+                    String panNumber = scanner.nextLine();
+                    System.out.print("Enter Debit Card Number: ");
+                    String debitCardNumber = scanner.nextLine();
+                    System.out.print("Enter Credit Card Number: ");
+                    String creditCardNumber = scanner.nextLine();
+                    System.out.print("Set a Password: ");
+                    String password = scanner.nextLine();
+
+                    UserCard newUserCard = new UserCard(name, dateOfBirth, address, aadharNumber, panNumber, debitCardNumber, creditCardNumber, password);
+                    userCards.add(newUserCard);
+                    System.out.println("New entry added.");
+                    break;
+
+                case 2:
+                    System.out.print("Enter Password: ");
+                    String enteredPassword = scanner.nextLine();
+
+                    System.out.println("Select a user to print:");
+                    for (int i = 0; i < userCards.size(); i++) {
+                        System.out.println(i + ". User");
+                    }
+                    int userChoice = scanner.nextInt();
+
+                    if (userChoice >= 0 && userChoice < userCards.size()) {
+                        UserCard selectedUser = userCards.get(userChoice);
+                        selectedUser.printName(enteredPassword);
+                        selectedUser.printDateOfBirth(enteredPassword);
+                        selectedUser.printAddress(enteredPassword);
+                        selectedUser.printAadharNumber(enteredPassword);
+                        selectedUser.printPANNumber(enteredPassword);
+                        selectedUser.printDebitCardNumber(enteredPassword);
+                        selectedUser.printCreditCardNumber(enteredPassword);
+                    } else {
+                        System.out.println("Invalid user selection.");
+                    }
+                    break;
+
+                case 0:
+                    System.out.println("Exiting.");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please select a valid option.");
+            }
+        } while (choice != 0);
+    }
+}
