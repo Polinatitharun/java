@@ -1,0 +1,55 @@
+package timetable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+
+public class timetable {
+
+    public static void main(String[] args) {
+    	
+        HashMap<String, String> teachers = new HashMap<>();
+        teachers.put("ramana", "crt");
+        teachers.put("kumar", "c");
+        teachers.put("moin", "iot");
+        teachers.put("vani", "cfot");
+        teachers.put("rana", "english");
+        teachers.put("babuji", "lab");
+        teachers.put("nag raju", "AFM");
+        teachers.put("samuel", "java");
+        teachers.put("devi", "crts");
+        teachers.put("pradeep", "os");
+        ArrayList<String> timeSlots = new ArrayList<>();
+        timeSlots.add("9:00-9:45");
+        timeSlots.add("9:45-10:30");
+        timeSlots.add("10:30-10:45");
+        timeSlots.add("10:45-11:30");
+        timeSlots.add("11:30-12:15");
+        timeSlots.add("12:15-1:00");
+        timeSlots.add("1:00-1:45");
+        timeSlots.add("1:45-2:30");
+        timeSlots.add("2:30-2:45");
+        timeSlots.add("2:45-3:30");
+        timeSlots.add("3:30-4:15");
+
+        ArrayList<String> subjects = new ArrayList<>(teachers.values());
+        Collections.shuffle(subjects);
+
+        int subjectIndex = 0;
+
+        for (String time : timeSlots) {
+            if (time.equals("10:30-10:45") || time.equals("2:30-2:45")) {
+                System.out.println(time + " break");
+            } 
+            else if(time.equals("12:15-1:00")){
+            	System.out.println(time+" Lunch break");
+            }
+            else {
+                String subject = subjects.get(subjectIndex % subjects.size());
+                System.out.println(time + " " + subject);
+                subjectIndex++;
+            }
+        }
+    
+    }
+}
